@@ -1,0 +1,46 @@
+
+-- Tạo cơ sở dữ liệu EventManagement
+CREATE DATABASE EventManagement;
+GO
+
+USE EventManagement;
+GO
+
+-- Tạo bảng Organizer
+CREATE TABLE Organizer (
+    OrganizerID INT PRIMARY KEY,
+    OrganizerName NVARCHAR(100),
+    ContactPerson NVARCHAR(100),
+    Email NVARCHAR(100),
+    Phone NVARCHAR(20)
+);
+
+-- Tạo bảng Location
+CREATE TABLE Location (
+    LocationID INT PRIMARY KEY,
+    LocationName NVARCHAR(100),
+    Address NVARCHAR(200),
+    Capacity INT CHECK (Capacity > 0)
+);
+
+-- Tạo bảng Event
+CREATE TABLE Event (
+    EventID INT PRIMARY KEY,
+    EventName NVARCHAR(100),
+    StartDate DATE,
+    EndDate DATE,
+    Status NVARCHAR(20) CHECK (Status IN ('Scheduled', 'Ongoing', 'Cancelled')),
+    OrganizerID INT FOREIGN KEY REFERENCES Organizer(OrganizerID),
+    LocationID INT FOREIGN KEY REFERENCES Location(LocationID),
+    CHECK (EndDate >= StartDate)
+);
+
+-- Tạo bảng Attendee
+CREATE TABLE Attendee (
+    AttendeeID INT PRIMARY KEY,
+    FullName NVARCHAR(100),
+    Email NVARCHAR(100),
+    Phone NVARCHAR(20)
+);
+
+-- Tạo bảng Registration
